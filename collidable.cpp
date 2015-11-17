@@ -1,6 +1,7 @@
 #include "collidable.h"
 
-Collidable :: Collidable(){
+Collidable :: Collidable(QRect r){
+    shape = r;
 }
 
 void Collidable :: setRect(QRect r){

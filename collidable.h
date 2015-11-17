@@ -11,7 +11,7 @@ class Collidable : public QObject {
     Q_OBJECT
 
     public:
-        Collidable();
+        Collidable(QRect);
         void setRect(QRect);
         QRect getRect();
         virtual bool collision(QRect);
