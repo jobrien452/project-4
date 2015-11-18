@@ -6,6 +6,9 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QWidget>
+#include <QList>
+#include <QKeyEvent>
+#include <QKeySequence>
 
 #include "racket.h"
 #include "ball.h"
@@ -26,6 +29,7 @@ class Engine : public QObject {
     private:
 	QList<Racket*> paddles;
 	QList<QEvent*> events;
+	QList<Collidable*>  drawables;
 	Ball * b;
 	int s1,s2;
 	QPixmap board;
