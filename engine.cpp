@@ -5,6 +5,7 @@ Engine :: Engine(QWidget * view){
 	//create pixmap with middle line
 	//create
 	QRect temp = view->rect();
+	model1 = new Model(view->rect());
 	QSize rs(10, 30);
 	paddles.append(new Racket(QRect(QPoint(temp.topLeft().x()+5,temp.center().y()),rs),"a","s", temp.bottom().y()));
 	paddles.append(new Racket(QRect(QPoint(temp.topRight().x()-15, temp.center().y()),rs),"k","l",temp.bottom().y()));
@@ -15,11 +16,12 @@ Engine :: Engine(QWidget * view){
 	pixInit(temp);
 }
 
-void Engine :: paint(QPainter * p){
-	p->drawPixmap(0,0,bounds);
+void Engine :: paint(QPainter * painter){
+	model1 -> draw(painter);
+	*/p->drawPixmap(0,0,bounds);
 	foreach( Collidable c, drawables ){
 	    c.draw(p);
-	}
+	}*/
 }
 
 void Engine :: update(){
