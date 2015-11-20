@@ -35,7 +35,6 @@ class Model : public QObject {
         &int  rScore1();
         &int  rScore2();
         &float rBallang();
-        bool release();
         void draw(QPainter *);
     private:
         QRect ball, racket1, racket2;
