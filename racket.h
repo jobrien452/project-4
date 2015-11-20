@@ -16,7 +16,7 @@ class Racket : public Collidable {
 	int& rmax();
     private:
 	QKeySequence *  up, down;
-        int mstate, max;
+        int mstate, lstate, max;
     public slots:
         void moveUp();
         void moveDown();

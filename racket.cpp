@@ -6,36 +6,34 @@ Racket :: Racket (QRect r, QString up, Qstring down, int m)
     down = new QKeySequence(tr(down));
     max = m;
     mstate = 0;
+    lstate = 0;
 }
 
-bool Racket :: collision(QRect r){
-    return Collidable::collision(r);
+&QRect Racket :: rRect(){
+   return &shape;
 }
 
-int Racket :: pressed(){
-    return mstate;
+&int Racket :: rstate(){
+    return &mstate;
 }
 
-int& Racket :: rmax(){
-    return &max;
+int Racket :: max(){
+    return max;
 }
-
+/*
 void Racket :: press(QKeySequence x){
-    if(up.matches(x) && shape.topLeft().y() >= 0){
-        mstate = 1;
-    }else if(down.matches(x) && shape.bottomLeft().y() <= max){
-        mstate = 2;
-    }else{
-        mstate = 0; 
+    if(mstate == 0){ 
+        if(up.matches(x) && shape.topLeft().y() >= 0){
+            mstate = 1;
+        }else if(down.matches(x) && shape.bottomLeft().y() <= max){
+       		mstate = 2;
+        }
     }
 }
 
-void Racket :: moveUp(){
-    shape.moveCenter(QPoint(shape.center().x(), shape.center().y()-1));
+void Racket :: release(QKeySequence x){
+    if(mstate != 0){
+        if(up.matches(x) || down.matches(x)){
 }
+*/
 
-void Racket :: moveDown(){
-    shape.moveCenter(QPoint(shape.center().x(), shape.center().y()+1));
-}
-
-void Racket :: draw()
