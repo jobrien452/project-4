@@ -1,27 +1,77 @@
 #include <QSize>
 #include "engine.h"
 
-Engine :: Engine(QWidget * view){
-	//create pixmap with middle line
-	//create
-	QRect temp = view->rect();
-	model1 = new Model(view->rect());
-	QSize rs(10, 30);
-	paddles.append(new Racket(QRect(QPoint(temp.topLeft().x()+5,temp.center().y()),rs),"a","s", temp.bottom().y()));
-	paddles.append(new Racket(QRect(QPoint(temp.topRight().x()-15, temp.center().y()),rs),"k","l",temp.bottom().y()));
-	b = new Ball();// not implemented yet
-	drawables.append(b);
-	drawables.append(paddles[0]);
-	drawables.append(paddles[1]);
-	pixInit(temp);
+Engine :: Engine(Model m){
+    data = &m;
 }
 
-void Engine :: paint(QPainter * painter){
-	model1 -> draw(painter);
-	*/p->drawPixmap(0,0,bounds);
-	foreach( Collidable c, drawables ){
-	    c.draw(p);
-	}*/
+void Engine :: parseEvents(){
+    if(!events.isEmpty()){
+        for(int i = 0; i < events.size(); i++){
+            if(!events[i]->isAutoRepeat()){
+                pevents.append(events[i]);
+            }
+        } 
+    }
+    events.clear();
+}
+
+void Engine :: checkCollision(){
+    parseEvents();
+    pushEvents();
+    if(checkWin())
+        return;
+
+    bounce();
+    
+}
+
+bool Engine :: checkWin(){
+    if(data->rBall().center().x()>data->maxw){
+        data->rScore2()++;
+        reset();
+        return true;
+    }else if(data->rBall().center.x()<0){
+        data->rScore1()++;
+        reset();
+        return true;
+    }
+    return false;
+}
+
+void Engine :: pushEvents(){
+    foreach(QKeyEvent * k, pevents){
+        data->setStateR1(k);
+        data->setStateR2(k);
+        movPaddles();
+    }
+    pevents.clear();
+}
+
+void Engine :: movPaddles(){
+    if(data->nextStepR1() != 0){
+        if(data->rRacket1().bottomLeft().y()+data->nextStepR1() < data->getHeight()
+           && data->rRacket1().topLeft().y()+data->nextStepR1() > 0){
+
+            data->rRacket1().center().ry()+=data->nextStepR1();
+        }
+    }
+
+    if(data->nextStepR2() != 0){
+        if(data->rRacket1().bottomLeft().y()+data->nextStepR1() < data->getHeight()
+           && data->rRacket1().topLeft().y()+data->nextStepR1() > 0){
+        
+            data->rRacket2().center().ry()+=data->nextStepR1();
+        }
+    }
+}
+
+void Engine :: bounce(){
+    if(data->rBall().intersects(data.rRacket1())){
+        data-> 
+    
+        
+    }
 }
 
 void Engine :: update(){
@@ -44,7 +94,7 @@ void Engine :: update(){
 
 }
 
-void Engine :: addEvent(QEvent * e){
+void Engine :: addEvent(QKeyEvent * e){
     events.append(e);
 }
 

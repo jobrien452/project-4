@@ -3,13 +3,13 @@
 
 #include <QObject>
 #include <QRect>
-#include <QPainter>
-#include <QPixmap>
-#include <QWidget>
 #include <QList>
 #include <QKeyEvent>
-#include <QKeySequence>
+#include <random>
+#include <cmath>
 #include "model.h"
+
+#define PI 3.14159265
 
 class Engine : public QObject {
 
@@ -19,11 +19,13 @@ class Engine : public QObject {
         Engine(Model);
     private:
     	Model * data;
-    	QList<QKeyEvent *> kevents;
+    	QList<QKeyEvent *> events, pevents;
         //all private methods go in update
         void parseEvents();
         void pushEvents();
     	void checkCollison();//bounce ang in collisions
+        void movePaddles();
+        void bounce();
     	void bounceAng();//sub of collision
         void checkWin();//sub of collision
 	

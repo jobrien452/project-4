@@ -68,7 +68,7 @@ QSize Model :: getSize(){
     return frame;
 }
 
-&int Model :: rBallvel(){
+&float Model :: rBallvel(){
     return &ball;
 }
 
@@ -82,6 +82,14 @@ QSize Model :: getSize(){
 
 &float Model :: rBallang(){
     return &ballang;
+}
+
+int Model :: getHeight(){
+    return maxh;
+}
+
+int Model :: getWidth(){
+    return maxw;
 }
 
 void Model :: draw(QPainter * painter){
