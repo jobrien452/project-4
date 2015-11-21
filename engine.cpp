@@ -97,7 +97,7 @@ void Engine :: bounce(){
         bounceAng();
         return;
     }else if(data->rBall().intersects(data->rRacket2()) &&
-        data->rBall().intersected(data->rRacket2()).x() > 
+        data->rBall().intersected(data->rRacket2()).x() < 
         data->rRacket2().center().x()){
 
         data->rBall().moveRight(data->rRacket2().topLeft().x()-3);
