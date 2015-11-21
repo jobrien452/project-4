@@ -1,8 +1,9 @@
 #include <QSize>
+#include <QDebug>
 #include "engine.h"
 
-Engine :: Engine(Model m){
-    data = &m;
+Engine :: Engine(Model*  m){
+    data = m;
     connect(data, SIGNAL(pushEvent(QKeyEvent *)), this, SLOT(addEvent(QKeyEvent *)));
     connect(data, SIGNAL(init()), this, SLOT(update()));
     setup();
@@ -10,8 +11,9 @@ Engine :: Engine(Model m){
 
 void Engine :: setup(){
     start = 0;
+    data->rBall().moveLeft(data->getWidth()/2);
     data->rBallvel() = randF(vmin, vmax);
-    data->rBall().moveTop((int)randF(omin,omax);
+    data->rBall().moveTop(randF(omin,omax));
     data->rBallang() = randF(amin, amax);
 }
 
@@ -19,17 +21,6 @@ float Engine :: randF(float min, float max){
     std::default_random_engine el(rd());
     std::uniform_real_distribution<float> uniform_dist(min, max);
     return uniform_dist(el);
-}
- 
-void Engine :: parseEvents(){
-    if(!events.isEmpty()){
-        for(int i = 0; i < events.size(); i++){
-            if(!events[i]->isAutoRepeat()){
-                pevents.append(events[i]);
-            }
-        } 
-    }
-    events.clear();
 }
 
 void Engine :: checkCollision(){
@@ -41,12 +32,12 @@ void Engine :: checkCollision(){
 }
 
 bool Engine :: checkWin(){
-    if(data->rBall().center().x()>data->maxw){
-        data->rScore2()++;
+    if(data->rBall().center().x()>data->getWidth()){
+        data->rScore1()++;
         reset();
         return true;
-    }else if(data->rBall().center.x()<0){
-        data->rScore1()++;
+    }else if(data->rBall().center().x()<0){
+        data->rScore2()++;
         reset();
         return true;
     }
@@ -54,12 +45,13 @@ bool Engine :: checkWin(){
 }
 
 void Engine :: pushEvents(){
-    foreach(QKeyEvent * k, pevents){
-        data->setStateR1(k);
-        data->setStateR2(k);
-        movPaddles();
+    for(int i = 0; i < keys.size(); i++){
+        data->setStateR1(keys[i], repeat[i]);
+        data->setStateR2(keys[i], repeat[i]);
+        movePaddles();
     }
-    pevents.clear();
+    keys.clear();
+    repeat.clear();
 }
 
 void Engine :: movePaddles(){
@@ -69,53 +61,59 @@ void Engine :: movePaddles(){
 
             data->rRacket1().moveCenter(
                     QPoint(data->rRacket1().center().x(),
-                    data->rRacket1().center.y()+data->nextStepR1())
+                    data->rRacket1().center().y()+data->nextStepR1())
             );
         }
     }
 
     if(data->nextStepR2() != 0){
-        if(data->rRacket1().bottomLeft().y()+data->nextStepR1() < data->getHeight() &&
-            data->rRacket1().topLeft().y()+data->nextStepR1() > 0){
+        if(data->rRacket2().bottomLeft().y()+data->nextStepR2() < data->getHeight() &&
+            data->rRacket2().topLeft().y()+data->nextStepR2() > 0){
         
-            data->rRacket1().moveCenter(
-                    QPoint(data->rRacket1().center().x(),
-                    data->rRacket1().center.y()+data->nextStepR1())
+            data->rRacket2().moveCenter(
+                    QPoint(data->rRacket2().center().x(),
+                    data->rRacket2().center().y()+data->nextStepR2())
             );
         }
     }
 }
 
 void Engine :: bounce(){
-    ballstep();
-    if(data->rBall().top().y() < 0){
+    ballStep();
+    if(data->rBall().top() < 0){
         data->rBall().moveTop(0);
         data->rBallang() = fmodf(-data->rBallang(), 2 * PI);
-    }else if(data->rBall().bottom().y() > data->getHeight()){
-        data->rBall().moveBottom(data->getHeight);
-        data->rBallang()= fmof(-data->rBallang(), 2 * PI);
+    }else if(data->rBall().bottom() > data->getHeight()){
+        data->rBall().moveBottom(data->getHeight());
+        data->rBallang()= fmodf(-data->rBallang(), 2 * PI);
     }
 
-    if(data->rBall().intersects(data->rRacket1())){
-        data->rBall().moveLeft(data->rRacket1().topRight().x()+1);
-        data->rBallvel()= -data->rBallvel();
+    if(data->rBall().intersects(data->rRacket1()) && 
+        data->rBall().intersected(data->rRacket1()).x() > 
+        data->rRacket1().center().x()){
+
+        data->rBall().moveLeft(data->rRacket1().topRight().x()+3);
+        //data->rBallvel()= -data->rBallvel();
         bounceAng();
         return;
-    }else if(data->rBall().intersects(data->rRacket2())){
-        data->rBall().moveRight(data->rRacket2().topLeft().x()-1);
-        data->rBallvel()= -data->rBallvel(); 
+    }else if(data->rBall().intersects(data->rRacket2()) &&
+        data->rBall().intersected(data->rRacket2()).x() > 
+        data->rRacket2().center().x()){
+
+        data->rBall().moveRight(data->rRacket2().topLeft().x()-3);
+        //data->rBallvel()= -data->rBallvel(); 
         bounceAng();
         return;
     }
 }
 
 void Engine :: ballStep(){
-    const int xStep = data->rBallvel()* (int)cos(data->rBallang());
-    const int yStep = data->rBallvel()* (int)sin(data->rBallang());
-    const QPoint tempc = data->rBall().center();
-    tempc.rx() += xStep;
-    tempc.ry() += yStep;
-    data->rBall().moveCenter(tempc);
+    float xStep = data->rBallvel()* cos(data->rBallang());
+    float yStep = data->rBallvel()* sin(data->rBallang());
+    data->rBall().moveCenter(
+        QPointF(data->rBall().center().x()+xStep,
+        data->rBall().center().y()+yStep));
+    
 }
 
 void Engine :: bounceAng(){
@@ -125,22 +123,23 @@ void Engine :: bounceAng(){
 
         angle += 1;
     }
-    data->rBallang = angle;
+    data->rBallang() = angle;
 }
  
 void Engine :: update(){
-    if(start > 2){
-        parseEvents();
+    if(start > 180){
         pushEvents();
         checkCollision();
     }else{
         start++;
     }
-    
 }
 
 void Engine :: addEvent(QKeyEvent * e){
-    events.append(e);
+    //qDebug()<< "E:" << e->text();
+    repeat.append(e->isAutoRepeat());
+    keys.append(e->key());
+
 }
 
 void Engine :: reset(){

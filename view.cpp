@@ -1,12 +1,13 @@
+#include <QDebug>
 #include "view.h"
 
-View :: View ( QWidget * parent, Model m )
+View :: View ( QWidget * parent, Model* m )
 : QWidget( parent ) {
    
-    data = &m; 
+    data = m; 
     setFixedSize(data->getSize());
-    QPallet pal(palette());
-    pal.setColor(QPalette:Background, Qt::black);
+    QPalette pal(palette());
+    pal.setColor(QPalette::Background, Qt::black);
     setPalette(pal);
     setup();
     connect(this, SIGNAL(pushEvent(QKeyEvent *)), data, SLOT(queEvent(QKeyEvent *)));
@@ -18,22 +19,32 @@ View :: View ( QWidget * parent, Model m )
 }
 
 void View :: paintEvent(QPaintEvent * event){
-    
+    //static int x = 0;
     QPainter paint(this);
-        paint.drawPixmap(0,0,board);
-        m->draw(&paint);
+    paint.drawPixmap(0,0,board);
+    data->draw(&paint);
+    //if(x > 300 && x<311){
+    //	qDebug() << "view: " << data->rBall().center();
+    //}
+    //x++;
 
 }
 
 void View :: keyPressEvent(QKeyEvent * event){
-        emit pushEvent(event);
+    //qDebug() << event->text();
+    emit pushEvent(event);
+}
+
+void View :: keyReleaseEvent(QKeyEvent * event){
+    emit pushEvent(event);
 }
 
 void View :: setup(){
     board = QPixmap(data->getWidth(), data->getHeight());
     board.fill(Qt::black);
     QPainter paint(&board);
-    for(int i = 0; i <= data->getHeight()-4, i+=4 ){ 
-        paint->drawLine(data->getWidth()/2,i, data->getWidth()/2,i+4);
+    paint.setPen(Qt::white);
+    for(int i = 0; i <= data->getHeight()-8; i+=8 ){
+       	paint.drawLine(data->getWidth()/2,i, data->getWidth()/2,i+4);
     }
 }
