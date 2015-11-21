@@ -101,6 +101,10 @@ void Model :: draw(QPainter * painter){
     painter -> drawText(QPoint(maxw/2 + 10, 15), QString::number(score2));
 }
 
-void Model :: reset() {
-    emit reinit();
+void Model :: update() {
+    emit init();
+}
+
+void Model :: queEvent(QKeyEvent * e){
+    emit pushEvent(e);
 }

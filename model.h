@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QKeySequence>
+#include <QKeyEvent>
 #include <QPainter>
 #include <QRect>
 #include <QSize>
@@ -48,9 +49,11 @@ class Model : public QObject {
         rakState r1state, r2state;
         bool pressed;
     public slots:
-        void reset();
+        void update();
+        void queEvent(QKeyEvent *);
     signals:
-        void reinit();
+        void init();
+        void pushEvent(QKeyEvent *);
 
 };
 

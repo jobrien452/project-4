@@ -6,22 +6,24 @@
 #include <QTimer>
 #include <QPainter>
 #include <QShortcut>
-#include "engine.h"
+#include <QKeySequence>
+#include <QPixmap>
+#include "model.h"
 
 class View : public QWidget {
 
     Q_OBJECT
 
     public:
-        explicit View(QWidget *parent = 0);
+        explicit View(QWidget *parent = 0, Model);
     protected:
         void paintEvent(QPaintEvent *);
     private:
-        Engine * e;
-	QTimer * timer;
+        QTimer * timer;
+        QPixmap board;
+        void setup();
     signals:
-        void quit();
-
+        void pushEvent(QKeyEvent *);
 };
 
 #endif
