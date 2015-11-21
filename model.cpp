@@ -9,7 +9,7 @@ Model :: Model(int w, int h){
 	ball(QPoint(maxw/2, maxh/2),sball);//temp declaration
 	score1 = 0;
 	score2 = 0;
-	bVel = 0; //temp declaration
+	bVel = initBallVelocity; //temp declaration
 	ballang = 0; //temp declaration
     r1state = Model::STOP;
 }
@@ -52,15 +52,15 @@ int Model :: nextStepR2(){
     return rakStep * r2state;
 }
 
-&QRect Model :: rBall(){
+QRect Model :: &rBall(){
     return &ball;
 }
 
-&QRect Model :: rRacket1(){
+QRect Model :: &rRacket1(){
     return &racket1;
 }
 
-&QRect Model :: rRacket2(){
+QRect Model :: &rRacket2(){
     return &racket2;
 }
 
@@ -68,19 +68,19 @@ QSize Model :: getSize(){
     return frame;
 }
 
-&float Model :: rBallvel(){
-    return &ball;
+float Model :: &rBallvel(){
+    return &balVel;
 }
 
-&int Model :: rScore1(){
+int Model :: &rScore1(){
     return &score1;
 }
 
-&int Model :: rScore2(){
+int Model :: &rScore2(){
     return &score2;
 }
 
-&float Model :: rBallang(){
+float Model :: &rBallang(){
     return &ballang;
 }
 

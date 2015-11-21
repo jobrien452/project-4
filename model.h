@@ -18,7 +18,7 @@ class Model : public QObject {
     };
     
     const int rakStep = 5;
-    const float balVel = 4.0;
+    const float initBallVelocity = 4.0;
     const QSize paddle(10,30);
     const QSize sball(5,5)
 
@@ -28,14 +28,14 @@ class Model : public QObject {
         void setStateR2(QKeyEvent *);
         int nextStepR1();
         int nextStepR2();
-        &QRect rBall();
-        &QRect rRacket1();
-        &QRect rRacket2();
+        QRect & rBall();
+        QRect & rRacket1();
+        QRect & rRacket2();
         QSize getSize();
-        &float  rBallvel();
-        &int  rScore1();
-        &int  rScore2();
-        &float rBallang();
+        float & rBallvel();
+        int & rScore1();
+        int & rScore2();
+        float & rBallang();
         int getHeight();
         int getWidth();
         void draw(QPainter *);
@@ -44,7 +44,7 @@ class Model : public QObject {
         QSize frame;
         QKeySequence r1up, r1down, r2up, r2down;
         int score1, score2, maxh, maxw;
-        float ballang;
+        float ballang, balVel;
         rakState r1state, r2state;
         bool pressed;
     public slots:

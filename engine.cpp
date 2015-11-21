@@ -3,8 +3,22 @@
 
 Engine :: Engine(Model m){
     data = &m;
+    setup();
 }
 
+void Engine :: setup(){
+    start = 0;
+    data->rBallvel() = randF(vmin, vmax);
+    data->rBall().moveTop((int)randF(omin,omax);
+    data->rBallang() = randF(amin, amax);
+}
+
+float Engine :: randF(float min, float max){
+    std::default_random_engine el(rd());
+    std::uniform_real_distribution<float> uniform_dist(min, max);
+    return uniform_dist(el);
+}
+ 
 void Engine :: parseEvents(){
     if(!events.isEmpty()){
         for(int i = 0; i < events.size(); i++){
@@ -17,8 +31,6 @@ void Engine :: parseEvents(){
 }
 
 void Engine :: checkCollision(){
-    parseEvents();
-    pushEvents();
     if(checkWin())
         return;
 
@@ -48,61 +60,87 @@ void Engine :: pushEvents(){
     pevents.clear();
 }
 
-void Engine :: movPaddles(){
+void Engine :: movePaddles(){
     if(data->nextStepR1() != 0){
-        if(data->rRacket1().bottomLeft().y()+data->nextStepR1() < data->getHeight()
-           && data->rRacket1().topLeft().y()+data->nextStepR1() > 0){
+        if(data->rRacket1().bottomLeft().y()+data->nextStepR1() < data->getHeight() &&
+            data->rRacket1().topLeft().y()+data->nextStepR1() > 0){
 
-            data->rRacket1().center().ry()+=data->nextStepR1();
+            data->rRacket1().moveCenter(
+                    QPoint(data->rRacket1().center().x(),
+                    data->rRacket1().center.y()+data->nextStepR1())
+            );
         }
     }
 
     if(data->nextStepR2() != 0){
-        if(data->rRacket1().bottomLeft().y()+data->nextStepR1() < data->getHeight()
-           && data->rRacket1().topLeft().y()+data->nextStepR1() > 0){
+        if(data->rRacket1().bottomLeft().y()+data->nextStepR1() < data->getHeight() &&
+            data->rRacket1().topLeft().y()+data->nextStepR1() > 0){
         
-            data->rRacket2().center().ry()+=data->nextStepR1();
+            data->rRacket1().moveCenter(
+                    QPoint(data->rRacket1().center().x(),
+                    data->rRacket1().center.y()+data->nextStepR1())
+            );
         }
     }
 }
 
 void Engine :: bounce(){
-    if(data->rBall().intersects(data.rRacket1())){
-        data-> 
-    
-        
+    ballstep();
+    if(data->rBall().top().y() < 0){
+        data->rBall().moveTop(0);
+        data->rBallang() = fmodf(-data->rBallang(), 2 * PI);
+    }else if(data->rBall().bottom().y() > data->getHeight()){
+        data->rBall().moveBottom(data->getHeight);
+        data->rBallang()= fmof(-data->rBallang(), 2 * PI);
+    }
+
+    if(data->rBall().intersects(data->rRacket1())){
+        data->rBall().moveLeft(data->rRacket1().topRight().x()+1);
+        data->rBallvel()= -data->rBallvel();
+        bounceAng();
+        return;
+    }else if(data->rBall().intersects(data->rRacket2())){
+        data->rBall().moveRight(data->rRacket2().topLeft().x()-1);
+        data->rBallvel()= -data->rBallvel(); 
+        bounceAng();
+        return;
     }
 }
 
-void Engine :: update(){
+void Engine :: ballStep(){
+    const int xStep = data->rBallvel()* (int)cos(data->rBallang());
+    const int yStep = data->rBallvel()* (int)sin(data->rBallang());
+    const QPoint tempc = data->rBall().center();
+    tempc.rx() += xStep;
+    tempc.ry() += yStep;
+    data->rBall().moveCenter(tempc);
+}
 
-    //check for point here if point then call reset method, increment counter
-    //handling for events
-    while(!events.isEmpty()){
-        QEvent current = events.pop_back();
-        //code for keyevents but can handle and event type if code was added to check for it
-        if(current == QEvent::KeyPress || current == QEvent::KeyRelease){
-            QKeyEvent* temp = dynamic_cast<QKeyEvent*>(e);
-            foreach( Racket r, paddles ){
-                r->press(QKeySequence(temp->key()));
-            }
-        }
+void Engine :: bounceAng(){
+    float angle = fmodf(data->rBallang() + PI, 2 * PI);
+    if(angle == 0 || abs(angle) == PI/2 || abs(angle) == PI
+        || abs(angle) == PI + PI/2){
+
+        angle += 1;
     }
-	
-    //checking for ball collision is here 
-    //then movement if ther is no collision
-
+    data->rBallang = angle;
+}
+ 
+void Engine :: update(){
+    if(start > 2){
+        parseEvents();
+        pushEvents();
+        checkCollision();
+    }else{
+        start++;
+    }
+    
 }
 
 void Engine :: addEvent(QKeyEvent * e){
     events.append(e);
 }
 
-void Engine :: pixInit(QRect bounds){
-    board = QPixmap(bounds.bottomRight().x(), bounds.bottomRight().y());
-    board.fill(Qt::black);
-    QPainter PixmapPainter(&board);
-    for(int i = 0; i <= bounds.bottomRight().y()-4, i+=4 ){	
-    	PixmapPainter.drawLine(bounds.center().x(),i, bounds.center().x(),i+4);
-    }
+void Engine :: reset(){
+    setup();
 }
