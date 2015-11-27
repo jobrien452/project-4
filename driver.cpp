@@ -15,3 +15,9 @@ void Driver :: start(){
 View& Driver :: getView() {
     return myView;
 }
+
+QPixmap Driver :: grabScreen() {
+    return QPixmap::grabWidget(&myView, 
+		QRect(QPoint(0,0),QPoint(x,y))
+		); 
+}

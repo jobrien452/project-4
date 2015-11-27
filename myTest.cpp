@@ -1,9 +1,7 @@
-#include "model.h"
-#include "engine.h"
-#include "view.h"
-
+#include "driver.h"
 #include <QTest>
 #include <QDebug>
+#include <QTimer> 
 
 class myTest : public QObject {
     
@@ -11,27 +9,30 @@ class myTest : public QObject {
     
     //consts to set # of pixmaps saved to file during testing and the interval of snaps    
     const int snapshots = 60;// # of snapshots saved
-    const int interval = 1000;//interval of snapshots in millisec.
+    const int interval = 1000;//interval of snapshots in millisec, right now its at
+                           //about 1 snapshot per second 
 
     private slots:
         void initTestCase();
         void intervalTest();
         void cleanupTestCase();
     private:
-        Engine myEngine;
-        View myView;
-        Model myModel;
+        Driver m_driver;
+        QTimer * timer;
 
 };
 
 void myTest :: initTestCase()
 {
-
+    m_driver = Driver();
+    timer = new QTimer(this);   
+    timer->setInterval(interval);
 }
 
 void myTest :: intervalTest()
 {
-
+    int x = 1;
+    timer.start()
 }
 
 void myTest :: cleanupTestCase()

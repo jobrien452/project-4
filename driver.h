@@ -3,6 +3,7 @@
 
 #include <QThread>
 #include <QObject>
+#include <QPixmap>
 #include "model.h"
 #include "engine.h"
 #include "view.h"
@@ -19,6 +20,7 @@ class Driver : public QObject {
         void start();
 //	void stop();
 	View & getView();
+	QPixmap grabScreen();
     private:
         QThread engineThread;
         Model myModel;
