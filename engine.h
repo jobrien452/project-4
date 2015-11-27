@@ -28,10 +28,9 @@ class Engine : public QObject {
     private:
     	Model* data;
     	QList<bool> repeat;
-	QList<int> keys;
+    	QList<int> keys;
         int start;
-	std::random_device rd;
-        //all private methods go in update
+	    std::random_device rd;
         void setup();
         float randF(float, float);
         void pushEvents();
@@ -42,8 +41,8 @@ class Engine : public QObject {
         bool checkWin();//sub of collision
         void ballStep();	
     public slots:
-        void addEvent(QKeyEvent *); //easily recodable for other event types but we only need keyevents for this
-    	void update();
+        void addEvent(QKeyEvent *); 
+        void update();
         void reset();
 
     /*signals:

@@ -1,6 +1,6 @@
 #include "model.h"
 
-Model :: Model(int w, int h){
+Model :: Model(int w, int h): mMutex(){
     maxh = h;
     maxw = w;
     frame = QSize(w,h);
@@ -17,6 +17,7 @@ Model :: Model(int w, int h){
 
 void Model :: setStateR1(int k, bool r){
     //qDebug()<<e->text();
+    //QMutexLocker(&mMutex);
     if(r1state == Model::STOP && !r){
         if(k == Qt::Key_A){
             r1state = Model::UP;
@@ -32,6 +33,7 @@ void Model :: setStateR1(int k, bool r){
 }
 
 void Model :: setStateR2(int k, bool r){
+    //QMutexLocker(&mMutex);
     if(r2state == Model::STOP && !r){
         if(k == Qt::Key_K){
             r2state = Model::UP;
@@ -94,7 +96,12 @@ int Model :: getWidth(){
     return maxw;
 }
 
+QMutex& Model :: getMutex(){
+    return mMutex;
+}
+
 void Model :: draw(QPainter * painter){
+    //QMutexLocker(&mMutex);
     painter -> setPen(Qt::white);
     painter -> drawRect(racket1);
     painter -> drawRect(racket2);

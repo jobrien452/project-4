@@ -9,6 +9,8 @@
 #include <QRect>
 #include <QSize>
 #include <QFont>
+#include <QMutex>
+#include <QMutexLocker>
 #include <QDebug>
 
 class Model : public QObject {
@@ -42,6 +44,7 @@ class Model : public QObject {
         int getHeight();
         int getWidth();
         void draw(QPainter *);
+	QMutex & getMutex();
     private:
         QRectF ball;
         QRect racket1, racket2;
@@ -51,6 +54,7 @@ class Model : public QObject {
         float ballang, balVel;
         rakState r1state, r2state;
         bool pressed;
+	QMutex mMutex;
     public slots:
         void update();
         void queEvent(QKeyEvent *);

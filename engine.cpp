@@ -127,9 +127,10 @@ void Engine :: bounceAng(){
 }
  
 void Engine :: update(){
-    if(start > 180){
+    if(start > 180 && data->getMutex().tryLock()){
         pushEvents();
         checkCollision();
+	data->getMutex().unlock();
     }else{
         start++;
     }
@@ -137,8 +138,11 @@ void Engine :: update(){
 
 void Engine :: addEvent(QKeyEvent * e){
     //qDebug()<< "E:" << e->text();
-    repeat.append(e->isAutoRepeat());
-    keys.append(e->key());
+    if(start > 180 && data->getMutex().tryLock()){
+        repeat.append(e->isAutoRepeat());
+        keys.append(e->key());
+        data->getMutex().unlock();
+    }
 
 }
 
