@@ -4,8 +4,8 @@
 
 Engine :: Engine(Model*  m){
     data = m;
-    connect(data, SIGNAL(pushEvent(QKeyEvent *)), this, SLOT(addEvent(QKeyEvent *)));
-    connect(data, SIGNAL(init()), this, SLOT(update()));
+    connect(data, SIGNAL(pushEvent(QKeyEvent *)), this, SLOT(addEvent(QKeyEvent *)), Qt::QueuedConnection);
+    connect(data, SIGNAL(init()), this, SLOT(update()), Qt::QueuedConnection);
     setup();
 }
 
