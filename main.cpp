@@ -10,7 +10,7 @@ int main(int argc, char **argv){
     QApplication app (argc, argv);
 <<<<<<< HEAD
     QThread engineThread;
-    Model myModel(800, 600);
+    Model myModel();
     Engine gameEngine(&myModel);
     gameEngine.moveToThread(&engineThread);
     View myView(0, &myModel);
