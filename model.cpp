@@ -98,19 +98,6 @@ QMutex& Model :: getMutex(){
     return mMutex;
 }
 
-void Model :: draw(QPainter * painter){
-    //QMutexLocker(&mMutex);
-    painter -> setPen(Qt::white);
-    painter -> drawRect(racket1);
-    painter -> drawRect(racket2);
-    painter -> setBrush(Qt::white);
-    painter -> drawEllipse(ball);
-    painter -> setFont(QFont("Arial", 20, QFont::Bold));
-    painter -> drawText(QPoint(maxw/2 - 25, 25), QString::number(score1));
-    painter -> drawText(QPoint(maxw/2 + 12, 25), QString::number(score2));
-    //qDebug() << "check " << ball;
-}
-
 void Model :: update() {
   //  qDebug() << "emitted\n";
     emit init();

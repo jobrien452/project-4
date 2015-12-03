@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QKeySequence>
 #include <QKeyEvent>
-#include <QPainter>
 #include <QRectF>
 #include <QRect>
 #include <QSize>
@@ -45,7 +44,6 @@ class Model : public QObject {
         float & rBallang();
         int getHeight();
         int getWidth();
-        void draw(QPainter *);
 	QMutex & getMutex();
     private:
         QRectF ball;

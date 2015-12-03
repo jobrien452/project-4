@@ -15,7 +15,8 @@ View :: View ( QWidget * parent, Model* m)
     connect(timer, SIGNAL(timeout()), data, SLOT(update()));
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
     timer -> start(15);
-    connect(new QShortcut(QKeySequence(tr("q", "quit")), this), SIGNAL(activated()),this,SLOT(close()));
+    connect(new QShortcut(QKeySequence(tr("q", "quit")), this), 
+		SIGNAL(activated()),this,SLOT(close()));
 }
 
 void View :: paintEvent(QPaintEvent * event){
@@ -23,7 +24,16 @@ void View :: paintEvent(QPaintEvent * event){
     QPainter paint(this);
     paint.drawPixmap(0,0,board);
     if(data->getMutex().tryLock()){
-        data->draw(&paint);
+        paint.setPen(Qt::white);
+	paint.drawRect(data->rRacket1());
+	paint.drawRect(data->rRacket2());
+	paint.setBrush(Qt::white);
+	paint.drawEllipse(data->rBall());
+	paint.setFont(QFont("Arial",20,QFont::Bold));
+	paint.drawText(QPoint(data->getWidth()/2 - 25, 25),
+			 QString::number(data->rScore1()));
+	paint.drawText(QPoint(data->getWidth()/2+12, 25),
+			 QString::number(data->rScore2()));
         data->getMutex().unlock();
     }
     //if(x > 300 && x<311){
