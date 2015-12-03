@@ -26,9 +26,11 @@ class Model : public QObject {
     const int rakStep = 18;
     const QSize paddle = QSize(15,50);
     const QSize sball = QSize(8,8);
+    const int maxh = 600;
+    const int maxw = 800;
 
     public:
-        Model(int w, int h);
+        Model();
         void setStateR1(int, bool);
         void setStateR2(int, bool);
         int nextStepR1();
@@ -50,7 +52,7 @@ class Model : public QObject {
         QRect racket1, racket2;
         QSize frame;
         QKeySequence r1up, r1down, r2up, r2down;
-        int score1, score2, maxh, maxw;
+        int score1, score2;
         float ballang, balVel;
         rakState r1state, r2state;
         bool pressed;

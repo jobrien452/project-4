@@ -21,7 +21,7 @@ class Engine : public QObject {
     const int omin = 20;
     const int omax = 420;
     const int amin = 0.5;
-    const int amax = 1.5 * PI;
+    const int amax = 1.3 * PI;
  
     public:
         Engine(Model * );
@@ -30,7 +30,7 @@ class Engine : public QObject {
     	QList<bool> repeat;
     	QList<int> keys;
         int start;
-	    std::random_device rd;
+	std::random_device rd;
         void setup();
         float randF(float, float);
         void pushEvents();

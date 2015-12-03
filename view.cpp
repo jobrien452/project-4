@@ -1,7 +1,7 @@
 #include <QDebug>
 #include "view.h"
 
-View :: View ( QWidget * parent, Model* m )
+View :: View ( QWidget * parent, Model* m))
 : QWidget( parent ) {
    
     data = m; 

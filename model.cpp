@@ -1,9 +1,7 @@
 #include "model.h"
 
-Model :: Model(int w, int h): mMutex(){
-    maxh = h;
-    maxw = w;
-    frame = QSize(w,h);
+Model :: Model(): mMutex(){
+    frame = QSize(maxw,maxh);
     racket1 = QRect(QPoint(5, maxh/2),paddle);
     racket2 = QRect(QPoint(maxw-paddle.width()-5, maxh/2),paddle);
     ball = QRectF(QPoint(maxw/2, maxh/2),sball);//temp declaration
