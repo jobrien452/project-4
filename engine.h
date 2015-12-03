@@ -31,6 +31,7 @@ class Engine : public QObject {
     	QList<int> keys;
         int start;
 	std::random_device rd;
+	float yStep;
         void setup();
         float randF(float, float);
         void pushEvents();

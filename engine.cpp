@@ -4,7 +4,8 @@
 
 Engine :: Engine(Model*  m){
     data = m;
-    connect(data, SIGNAL(pushEvent(QKeyEvent *)), this, SLOT(addEvent(QKeyEvent *)), Qt::QueuedConnection);
+    connect(data, SIGNAL(pushEvent(QKeyEvent *)), this, 
+	    SLOT(addEvent(QKeyEvent *)), Qt::QueuedConnection);
     connect(data, SIGNAL(init()), this, SLOT(update()), Qt::QueuedConnection);
     setup();
 }
@@ -15,6 +16,11 @@ void Engine :: setup(){
     data->rBallvel() = randF(vmin, vmax);
     data->rBall().moveTop(randF(omin,omax));
     data->rBallang() = randF(amin, amax);
+    yStep = data->rBallvel()* sin(data->rBallang());
+    data->rRacket1().moveCenter(QPoint(data->rRacket1().center().x(),
+				data->getHeight()/2));
+    data->rRacket2().moveCenter(QPoint(data->rRacket2().center().x(),
+				data->getHeight()/2));
 }
 
 float Engine :: randF(float min, float max){
@@ -83,9 +89,11 @@ void Engine :: bounce(){
     if(data->rBall().top() < 0){
         data->rBall().moveTop(0);
         data->rBallang() = fmodf(-data->rBallang(), 2 * PI);
+	yStep = data->rBallvel()* sin(data->rBallang());
     }else if(data->rBall().bottom() > data->getHeight()){
         data->rBall().moveBottom(data->getHeight());
         data->rBallang()= fmodf(-data->rBallang(), 2 * PI);
+	yStep = data->rBallvel()* sin(data->rBallang());
     }
 
     if(data->rBall().intersects(data->rRacket1()) && 
@@ -109,7 +117,7 @@ void Engine :: bounce(){
 
 void Engine :: ballStep(){
     float xStep = data->rBallvel()* cos(data->rBallang());
-    float yStep = data->rBallvel()* sin(data->rBallang());
+    //float yStep = data->rBallvel()* sin(data->rBallang());
     data->rBall().moveCenter(
         QPointF(data->rBall().center().x()+xStep,
         data->rBall().center().y()+yStep));
@@ -124,6 +132,7 @@ void Engine :: bounceAng(){
         angle += 1;
     }
     data->rBallang() = angle;
+    ballStep();
 }
  
 void Engine :: update(){
