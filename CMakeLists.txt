@@ -12,7 +12,7 @@ INCLUDE(${QT_USE_FILE})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 
 add_executable(pong main.cpp model.cpp engine.cpp view.cpp) # ${MOCSrcs})
-add_executable(pongTest mytest.cpp model.cpp engine.cpp view.cp snapshot.cpp)
+add_executable(pongTest mytest.cpp model.cpp engine.cpp view.cpp snapshot.cpp)
 
 target_link_libraries(pong Qt4::QtGui)
 target_link_libraries(pongTest Qt4::QtGui Qt4::QtTest)
