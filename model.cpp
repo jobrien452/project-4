@@ -17,10 +17,10 @@ void Model :: setStateR1(int k, bool r){
     //qDebug()<<e->text();
     //QMutexLocker(&mMutex);
     if(r1state == Model::STOP && !r){
-        if(k == Qt::Key_A){
+        if(k == Qt::Key_S){
             r1state = Model::UP;
             return;
-        }else if(k == Qt::Key_S){
+        }else if(k == Qt::Key_A){
             r1state = Model::DOWN;
             return;
         }
@@ -33,10 +33,10 @@ void Model :: setStateR1(int k, bool r){
 void Model :: setStateR2(int k, bool r){
     //QMutexLocker(&mMutex);
     if(r2state == Model::STOP && !r){
-        if(k == Qt::Key_K){
+        if(k == Qt::Key_L){
             r2state = Model::UP;
             return;
-        }else if(k == Qt::Key_L){
+        }else if(k == Qt::Key_K){
             r2state = Model::DOWN;
             return;
         }
