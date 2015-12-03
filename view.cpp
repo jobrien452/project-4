@@ -14,7 +14,7 @@ View :: View ( QWidget * parent, Model* m )
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), data, SLOT(update()));
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
-    timer -> start(17);
+    timer -> start(15);
     connect(new QShortcut(QKeySequence(tr("q", "quit")), this), SIGNAL(activated()),this,SLOT(close()));
 }
 
@@ -22,7 +22,10 @@ void View :: paintEvent(QPaintEvent * event){
     //static int x = 0;
     QPainter paint(this);
     paint.drawPixmap(0,0,board);
-    data->draw(&paint);
+    if(data->getMutex().tryLock()){
+        data->draw(&paint);
+        data->getMutex().unlock();
+    }
     //if(x > 300 && x<311){
     //	qDebug() << "view: " << data->rBall().center();
     //}

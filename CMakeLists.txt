@@ -15,7 +15,11 @@ add_executable(pong main.cpp model.cpp engine.cpp view.cpp) # ${MOCSrcs})
 add_executable(pongTest myTest.cpp model.cpp engine.cpp view.cpp)
 
 target_link_libraries(pong Qt4::QtGui)
+<<<<<<< HEAD
 target_link_libraries(pongTest Qt4::QtGui Qt4::QtTest)
+=======
+target_link_libraries(pong Qt4::QtGui)
+>>>>>>> 5606b7fdc7562b68e5c0bccd69e73d1340dbfec7
 
 enable_testing()
 
