@@ -25,8 +25,8 @@ class Snapshot : public QObject
     public slots:
         void snap()
         {
-            img = QPixmap::gradWidget(myView);  
-            img.toImage().save(l + "-" + QString::number(count), "PNG"); 
+            img = QPixmap::grabWidget(myView);  
+            img.toImage().save(l + "-" + QString::number(count)+".png", "PNG"); 
             count++;
         }
 };

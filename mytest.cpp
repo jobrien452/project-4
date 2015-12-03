@@ -18,14 +18,14 @@ class MyTest : public QObject
     const int snapInterval = 500; //2 snaps a second
     const int keyPressInterval = 1000; //1 keypress a second
     private:
-	    QList<Qt::Key> testKeys;
+	QList<Qt::Key> testKeys;
         QThread testThread;
-        Engine testEngine;
-        View testView;
-        Model testModel;
-    	Snapshot s;
-	    QTimer *timer;
-	    void loadKeys();
+        Engine * testEngine;
+        View * testView;
+        Model * testModel;
+    	Snapshot * s;
+	QTimer *timer;
+	void loadKeys();
     private slots:
         void initTestCase();
         void testGame();
@@ -34,24 +34,25 @@ class MyTest : public QObject
 };
 
 void MyTest :: initTestCase(){
-    testModel = Model();
-    testEngine = Engine(&testModel);
-    testEngine.moveToThread(&testThread);
-    testView = View(0, &testModel);
+    testModel = new Model();
+    testEngine = new Engine(testModel);
+    testEngine -> moveToThread(&testThread);
+    testView = new View(0, testModel);
     timer = new QTimer(this);
-    s = Snapshot(&testView, "test");
-    connect(timer, SIGNAL(timeout()), &s, SLOT(snap()));
-    engineThread.start();
-    testView.show();
-    QTest::qWaitForWindowShown(&testView);
+    s = new Snapshot(testView, "test");
+    connect(timer, SIGNAL(timeout()), s, SLOT(snap()));
+    testThread.start();
+    testView->show();
+    QTest::qWaitForWindowShown(testView);
     timer->start(snapInterval);
     loadKeys();
 }
 
 void MyTest :: testGame(){
-    while(!keys.empty()){
-        QTest::keyClick(testView, keys.pop_back());
-        qWait(keyPressInterval);
+    while(!testKeys.empty()){
+        QTest::keyClick(testView, testKeys.last());
+	testKeys.pop_back();
+        QTest::qWait(keyPressInterval);
     }
 }
 
@@ -75,7 +76,7 @@ void MyTest :: loadKeys(){
     QTextStream in(&file);
     while (!in.atEnd()) {
         QString line = in.readLine();
-        keys.append(line.toInt(0, 16));
+        testKeys.append((Qt::Key)line.toInt(0, 16));
     }
     file.close();   	
 }
